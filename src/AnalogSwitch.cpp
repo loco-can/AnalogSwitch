@@ -21,8 +21,11 @@ ANALOGSWITCH::ANALOGSWITCH(void) {
 
 
 // start at port number
-void ANALOGSWITCH::begin(uint8_t port) {
+void ANALOGSWITCH::begin(uint8_t port, uint16_t resolution) {
 	_port = port;
+	_resolution = resolution;
+
+	pinMode(_port, INPUT);
 }
 
 
@@ -42,8 +45,17 @@ uint8_t ANALOGSWITCH::get(void) {
 		// return current counter+1 (valid positions start at 1)
 		// return 0: no position found
 		if (_min[i] <= analogval && analogval <= _max[i]) {
-			i++;
-			break;
+
+Serial.print(_min[i]);
+Serial.print("<");
+Serial.print(analogval);
+Serial.print("<");
+Serial.print(_max[i]);
+Serial.print(" ");
+Serial.println(i);
+
+			// i++;
+			return i;
 		}
 
 		i++;
@@ -113,8 +125,6 @@ void ANALOGSWITCH::update(void) {
 
 	uint8_t i = 0;
 
-Serial.println();
-
 	// calculate switch position
 	// iterate positions
 	while (i < _pos_count) {
@@ -135,7 +145,7 @@ Serial.println();
 			_max[i] = ((_positions[i+1] - _positions[i]) / 2) + _positions[i] - 1;
 		}
 		else {
-			_max[i] = ANALOGSWITCH_MAX_ANALOG;
+			_max[i] = _resolution;
 		}
 
 		i++;
