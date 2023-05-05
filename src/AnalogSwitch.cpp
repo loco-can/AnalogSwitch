@@ -45,17 +45,7 @@ uint8_t ANALOGSWITCH::get(void) {
 		// return current counter+1 (valid positions start at 1)
 		// return 0: no position found
 		if (_min[i] <= analogval && analogval <= _max[i]) {
-
-Serial.print(_min[i]);
-Serial.print("<");
-Serial.print(analogval);
-Serial.print("<");
-Serial.print(_max[i]);
-Serial.print(" ");
-Serial.println(i);
-
-			// i++;
-			return i;
+			return i + 1;
 		}
 
 		i++;
